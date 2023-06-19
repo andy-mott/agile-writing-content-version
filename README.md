@@ -16,6 +16,9 @@ This WordPress plugin keeps track of content versions for posts and allows users
 
 ## Changelog
 
+### 1.03
+- Add dates to versions
+
 ### 1.02
 - Add description to top of comparison page
 
@@ -28,4 +31,4 @@ For support and feature requests, please contact the plugin author.
 
 ## Author
 
-Andy Mott with help from ChatGPT
+Andy Mott
