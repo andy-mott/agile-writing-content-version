@@ -1,0 +1,68 @@
+.awcv-version-info {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.awcv-version-selector {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.loading {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.awcv-comparison {
+    margin-top: 20px;
+    display: flex;
+}
+
+.awcv-content-1, .awcv-content-2 {
+    width: 50%;
+    padding: 10px;
+}
+.awcv-comparison-container {
+    display: flex;
+    margin-top: 20px;
+}
+
+.awcv-comparison-side {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.awcv-comparison-side h3 {
+    margin-top: 0;
+}
+.awcv-comparison-result {
+    font-family: monospace;
+}
+
+.awcv-comparison-result .common {
+    color: gray;
+}
+
+.awcv-comparison-result .addition {
+    color: green;
+}
+
+.awcv-comparison-result .removal {
+    color: red;
+}
+.awcv-description {
+    margin-bottom: 10px;
+}
+
+.awcv-color-green {
+    color: green;
+}
+
+.awcv-color-red {
+    color: red;
+}
+
+.awcv-color-grey {
+    color: grey;
+}
