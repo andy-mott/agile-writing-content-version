@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Agile Writing - Content Version
  * Description: A plugin to display changes to posts using jsdiff
- * Version: 1.02
+ * Version: 1.03
  * Author: Andy Mott
  */
 
@@ -44,27 +44,37 @@ function awcv_append_version_to_content($original_content) {
         // Check if we are in version compare mode
         if (isset($_GET['awcv_version_compare'])) {
             // Fetch all versions for this post
-            $versions = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$table_name} WHERE post_id = %d ORDER BY version ASC", $post->ID));
+            $versions = $wpdb->get_results($wpdb->prepare(
+                "SELECT cv.*, p.post_modified
+                 FROM {$table_name} AS cv
+                 INNER JOIN {$wpdb->prefix}posts AS p ON cv.post_id = p.ID
+                 WHERE cv.post_id = %d
+                 ORDER BY cv.version ASC", $post->ID
+            ));
 
-		// Build the version selection interface
-		$comparison_content = '<div class="awcv-version-selector">';
-		$comparison_content .= '<div class="awcv-description">Comparison view - new text is <span class="awcv-color-green">green</span>, removed text is <span class="awcv-color-red">red</span>, and common text is <span class="awcv-color-grey">grey</span>.</div>';
-		$comparison_content .= '<div id="awcv-comparison-result"></div>';
-		$comparison_content .= '<select id="awcv-version-1">';
-		foreach ($versions as $version) {
-			$comparison_content .= '<option value="' . esc_attr($version->version) . '">Version ' . esc_html($version->version) . '</option>';
-		}
-		$comparison_content .= '</select>';
+            // Build the version selection interface
+            $comparison_content = '<div class="awcv-version-selector">';
+            $comparison_content .= '<div class="awcv-description">Comparison view - new text is <span class="awcv-color-green">green</span>, removed text is <span class="awcv-color-red">red</span>, and common text is <span class="awcv-color-grey">grey</span>.</div>';
+            $comparison_content .= '<div id="awcv-comparison-result"></div>';
+            $comparison_content .= '<select id="awcv-version-1">';
+            foreach ($versions as $version) {
+                // Include the date next to the version number
+                $date = new DateTime($version->post_modified);
+                $formatted_date = $date->format('Y-m-d');
+                $comparison_content .= '<option value="' . esc_attr($version->version) . '">Version ' . esc_html($version->version) . ' (' . esc_html($formatted_date) . ')</option>';
+            }
+            $comparison_content .= '</select>';
 
-		$comparison_content .= '<select id="awcv-version-2">';
-		foreach ($versions as $version) {
-			$comparison_content .= '<option value="' . esc_attr($version->version) . '">Version ' . esc_html($version->version) . '</option>';
-		}
-		$comparison_content .= '</select>';
+            $comparison_content .= '<select id="awcv-version-2">';
+            foreach ($versions as $version) {
+                $date = new DateTime($version->post_modified);
+                $formatted_date = $date->format('Y-m-d');
+                $comparison_content .= '<option value="' . esc_attr($version->version) . '">Version ' . esc_html($version->version) . ' (' . esc_html($formatted_date) . ')</option>';
+            }
+            $comparison_content .= '</select>';
 
-		$comparison_content .= '<button id="awcv-compare-button">Compare</button>';
-		$comparison_content .= '</div>';
-
+            $comparison_content .= '<button id="awcv-compare-button">Compare</button>';
+            $comparison_content .= '</div>';
 
             // Append the comparison content before the version info
             $additional_content = $comparison_content . $additional_content;
